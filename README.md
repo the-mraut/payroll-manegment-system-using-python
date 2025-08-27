@@ -1,5 +1,5 @@
 Install Required Python Libraries
-1. Install library (os,time,pymysql):command pip install library_name
+1. Install library (tkinter , os , time , pymysql ):command pip install library_name
 2. Install dependencies from requirements.txt:pip install -r requirements.txt
 3. Direct installation (if not using requirements.txt): pip install pymysql
 4. Verify installation:  python -c "import pymysql; print('PyMySQL installed successfully!')"
