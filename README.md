@@ -9,7 +9,7 @@ Install & Configure MySQL Database (Using XAMPP)
 🔹 1. Install XAMPP
 Download XAMPP from: https://www.apachefriends.org/download.html
 Install it on your system (choose default settings).
-Open XAMPP Control Panel and start MySQL service.
+Open XAMPP Control Panel and start any more than two  service not work in one seriver and only compalsary MySQL.
 Click Admin to open phpMyAdmin in your browser.
 
 🔹 2. Create Database & Table with phpMyAdmin
