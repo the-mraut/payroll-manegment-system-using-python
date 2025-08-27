@@ -1,0 +1,41 @@
+Set Up MySQL Database
+
+Start MySQL Server and execute:
+CREATE DATABASE ems;
+USE ems;
+
+CREATE TABLE emp_salary (
+    e_id VARCHAR(50) PRIMARY KEY,
+    designation VARCHAR(100),
+    name VARCHAR(100),
+    age INT,
+    gender VARCHAR(10),
+    email VARCHAR(100),
+    hired VARCHAR(100),
+    dateofbirth VARCHAR(20),
+    dateofjoin VARCHAR(20),
+    experience VARCHAR(50),
+    id_proof VARCHAR(100),
+    contact VARCHAR(20),
+    status VARCHAR(50),
+    address TEXT,
+    month VARCHAR(20),
+    year VARCHAR(10),
+    salary DECIMAL(10,2),
+    total_days INT,
+    absent INT,
+    medical DECIMAL(10,2),
+    fund DECIMAL(10,2),
+    convence DECIMAL(10,2),
+    net_salary DECIMAL(10,2)
+);
+
+Configure Database Connection
+
+Edit employee_system.py if your MySQL credentials differ:
+con = pymysql.connect(
+    host='localhost',
+    user='root',
+    password='',
+    database='ems'
+)
