@@ -1,0 +1,748 @@
+from tkinter import *
+from tkinter import messagebox
+import pymysql
+import time
+import os
+
+class EmployeeSystem:
+    def __init__(self, root):
+        self.root = root
+        self.root.title("Employee Payroll Management System - Developed by Manthan Raut")
+        self.root.geometry("1350x700+0+0")
+        self.root.config(bg="#000000")
+
+        title = Label(self.root, text="Employee Payroll Management System", font=("Bauhaus 93", 25, "bold"),
+                      bg="#000000", fg="white", anchor="w", padx=10)
+        title.place(x=0, y=0, relwidth=1)
+
+##############frame1#######################################
+#+++++++++++++++variables++++++++++++++++++++++++++++++++++
+        self.var_code=StringVar()
+        self.var_designation=StringVar()
+        self.var_dateofbirth=StringVar()
+        self.var_name=StringVar()
+        self.var_dateofjoin=StringVar()
+        self.var_age=StringVar()
+        self.var_experience=StringVar()
+        self.var_gender=StringVar()
+        self.var_id=StringVar()
+        self.var_hired=StringVar()
+        self.var_status=StringVar()
+        self.var_email=StringVar()
+        self.var_contact=StringVar()
+
+        frame1 = Frame(self.root, bd=3, relief=RIDGE, bg="#ffffff")
+        frame1.place(x=2, y=45, width=730, height=660)
+        title2 = Label(frame1, text="Employee Details", font=("Bauhaus 93", 20, "bold"),
+                       bg="#FFE600", fg="#27043B", anchor="w", padx=10)
+        title2.place(x=0, y=0, relwidth=1)
+        
+        lbl_code=Label(frame1, text="Employee code:", font=("times new roman", 15),
+                        bg="#ffffff", fg="#000000")
+        lbl_code.place(x=10,y=50)
+
+        Text_code=Entry(frame1, font=("times new roman", 15), textvariable=self.var_code, fg="#000000",bd=2, bg="#F0F0F0")
+        Text_code.place(x=200, y=50, width=200, height=30)
+        btn_search=Button(frame1,  text="Search",command=self.search, font=("times new roman", 18), bg="#0410B8", fg="white", bd=2)
+        btn_search.place(x=470, y=50, width=140, height=30)
+
+#**********row1*****************
+        lbl_designation=Label(frame1, text="Designation:", font=("times new roman", 15),
+                       bg="#ffffff", fg="#000000")
+        lbl_designation.place(x=10,y=100)
+        Text_designation=Entry(frame1, font=("times new roman", 15),textvariable=self.var_designation, bg="#F0F0F0", fg="#000000",bd=2)
+        Text_designation.place(x=200, y=100, width=200, height=30)
+
+        lbl_Dateofbirth=Label(frame1, text="D.O.B:", font=("times new roman", 15),
+                       bg="#ffffff", fg="#000000")
+        lbl_Dateofbirth.place(x=450,y=100)
+        Text_dateofbirth=Entry(frame1, font=("times new roman", 15), textvariable=self.var_dateofbirth, bg="#F0F0F0", fg="#000000",bd=2)
+        Text_dateofbirth.place(x=520, y=100, width=200, height=30)
+
+#***********row2*****************
+        lbl_name=Label(frame1, text="Employee Name:", font=("times new roman", 15),
+                       bg="#ffffff", fg="#000000")
+        lbl_name.place(x=10,y=150)
+        Text_name=Entry(frame1, font=("times new roman", 15), textvariable=self.var_name, bg="#F0F0F0", fg="#000000",bd=2)
+        Text_name.place(x=200, y=150, width=200, height=30)
+
+        lbl_Dateofjoin=Label(frame1, text="D.O.J:", font=("times new roman", 15),
+                       bg="#ffffff", fg="#000000")
+        lbl_Dateofjoin.place(x=450,y=150)
+        Text_dateofjoin=Entry(frame1, font=("times new roman", 15), textvariable=self.var_dateofjoin, bg="#F0F0F0", fg="#000000",bd=2)
+        Text_dateofjoin.place(x=520, y=150, width=200, height=30)
+
+#***********row3*****************
+        lbl_age=Label(frame1, text="Employee Age:", font=("times new roman", 15),
+                       bg="#ffffff", fg="#000000")
+        lbl_age.place(x=10,y=200)
+        Text_age=Entry(frame1, font=("times new roman", 15), textvariable=self.var_age, bg="#F0F0F0", fg="#000000",bd=2)
+        Text_age.place(x=180, y=200, width=200, height=30)
+
+        lbl_Experience=Label(frame1, text="Experience:", font=("times new roman", 15),
+                       bg="#ffffff", fg="#000000")
+        lbl_Experience.place(x=400,y=200)
+        Text_experience=Entry(frame1, font=("times new roman", 15), textvariable=self.var_experience, bg="#F0F0F0", fg="#000000",bd=2)
+        Text_experience.place(x=520, y=200, width=200, height=30)
+
+#***********row4*****************
+        lbl_Gender=Label(frame1, text="Employee Gender:", font=("times new roman", 15),
+                       bg="#ffffff", fg="#000000")
+        lbl_Gender.place(x=10,y=250)
+        Text_gender=Entry(frame1, font=("times new roman", 15),textvariable=self.var_gender, bg="#F0F0F0", fg="#000000",bd=2)
+        Text_gender.place(x=200, y=250, width=200, height=30)
+
+        lbl_Id=Label(frame1, text="ID Proof:", font=("times new roman", 15),
+                       bg="#ffffff", fg="#000000")
+        lbl_Id.place(x=430,y=250)
+        Text_id=Entry(frame1, font=("times new roman", 15), textvariable=self.var_id, bg="#F0F0F0", fg="#000000",bd=2)
+        Text_id.place(x=520, y=250, width=200, height=30)
+
+#***********row5*****************
+        lbl_email=Label(frame1, text="Employee Email:", font=("times new roman", 15),
+                       bg="#ffffff", fg="#000000")
+        lbl_email.place(x=10,y=300)
+        Text_email=Entry(frame1, font=("times new roman", 15), textvariable=self.var_email, bg="#F0F0F0", fg="#000000",bd=2)
+        Text_email.place(x=180, y=300, width=200, height=30)
+
+        lbl_contact=Label(frame1, text="Contact No:", font=("times new roman", 15),
+                       bg="#ffffff", fg="#000000")
+        lbl_contact.place(x=400,y=300)
+        Text_contact=Entry(frame1, font=("times new roman", 15), textvariable=self.var_contact, bg="#F0F0F0", fg="#000000",bd=2)
+        Text_contact.place(x=520, y=300, width=200, height=30)
+
+#***********row6*****************
+        lbl_hired=Label(frame1, text="Hired location:", font=("times new roman", 15),
+                       bg="#ffffff", fg="#000000")
+        lbl_hired.place(x=10,y=360)
+        Text_hired=Entry(frame1, font=("times new roman", 15), textvariable=self.var_hired, bg="#F0F0F0", fg="#000000",bd=2)
+        Text_hired.place(x=180, y=360, width=200, height=30)
+
+        lbl_status=Label(frame1, text="Status:", font=("times new roman", 15),
+                       bg="#ffffff", fg="#000000")
+        lbl_status.place(x=400,y=360)
+        Text_status=Entry(frame1, font=("times new roman", 15), textvariable=self.var_status, bg="#F0F0F0", fg="#000000",bd=2)
+        Text_status.place(x=520, y=360, width=200, height=30)
+
+#*************row7*****************
+        lbl_address = Label(frame1, text="Employee Address:", font=("times new roman", 15),
+                            bg="#ffffff", fg="#000000")
+        lbl_address.place(x=10, y=430)
+
+        self.Text_address = Text(frame1, font=("times new roman", 15),  bg="#F0F0F0", fg="#000000", bd=2)
+        self.Text_address.place(x=200, y=430, width=470, height=200)
+
+
+##############frame2#######################################
+#**************variables*****************
+        self.var_month = StringVar()
+        self.var_year = StringVar()
+        self.var_salary = StringVar()
+        self.var_total = StringVar()
+        self.var_absent = StringVar()
+        self.var_medical = StringVar()
+        self.var_fund = StringVar()
+        self.var_convence = StringVar()
+        self.var_net = StringVar()
+
+        frame2 = Frame(self.root, bd=3, relief=RIDGE, bg="#ffffff")
+        frame2.place(x=732, y=45, width=633, height=350)
+
+        title3 = Label(frame2, text="Employee Salary Details", font=("Bauhaus 93", 20, "bold"),
+                       bg="#047575", fg="white", anchor="w", padx=10)
+        title3.place(x=0, y=0, relwidth=1)
+
+        lbl_month=Label(frame2, text="Month:", font=("times new roman", 15),
+                       bg="#ffffff", fg="#000000")
+        lbl_month.place(x=10,y=40)
+        Text_month=Entry(frame2, font=("times new roman", 15),textvariable=self.var_month, bg="#F0F0F0", fg="#000000",bd=2)
+        Text_month.place(x=80, y=40, width=120, height=30)
+        
+        lbl_year=Label(frame2, text="Year:", font=("times new roman", 15),
+                       bg="#ffffff", fg="#000000")
+        lbl_year.place(x=210,y=40)
+        Text_year=Entry(frame2, font=("times new roman", 15), textvariable=self.var_year, bg="#F0F0F0", fg="#000000",bd=2)
+        Text_year.place(x=270, y=40, width=120, height=30)
+
+        lbl_salary=Label(frame2, text="Salary:", font=("times new roman", 15),
+                       bg="#ffffff", fg="#000000")
+        lbl_salary.place(x=399,y=40)
+        Text_salary=Entry(frame2, font=("times new roman", 15), textvariable=self.var_salary, bg="#F0F0F0", fg="#000000",bd=2)
+        Text_salary.place(x=470, y=40, width=150, height=30)
+
+#**********row1*****************
+        lbl_total=Label(frame2, text="Total Day:", font=("times new roman", 15),
+                       bg="#ffffff", fg="#000000")
+        lbl_total.place(x=10,y=90)
+        Text_total=Entry(frame2, font=("times new roman", 15),textvariable=self.var_total, bg="#F0F0F0", fg="#000000",bd=2)
+        Text_total.place(x=120, y=90, width=180, height=30)
+
+        lbl_absent=Label(frame2, text="Absents:", font=("times new roman", 15),
+                       bg="#ffffff", fg="#000000")
+        lbl_absent.place(x=330,y=90)
+        Text_absent=Entry(frame2, font=("times new roman", 15), textvariable=self.var_absent, bg="#F0F0F0", fg="#000000",bd=2)
+        Text_absent.place(x=420, y=90, width=200, height=30)
+
+#***********row2*****************
+        lbl_medical=Label(frame2, text="Medical:", font=("times new roman", 15),
+                       bg="#ffffff", fg="#000000")
+        lbl_medical.place(x=10,y=140)
+        Text_medical=Entry(frame2, font=("times new roman", 15),textvariable=self.var_medical, bg="#F0F0F0", fg="#000000",bd=2)
+        Text_medical.place(x=120, y=140, width=160, height=30)
+
+        lbl_fund=Label(frame2, text="Provident Fund:", font=("times new roman", 15),
+                       bg="#ffffff", fg="#000000")
+        lbl_fund.place(x=290,y=140)
+        Text_fund=Entry(frame2, font=("times new roman", 15), textvariable=self.var_fund, bg="#F0F0F0", fg="#000000",bd=2)
+        Text_fund.place(x=440, y=140, width=180, height=30)
+
+#***********row3*****************
+        lbl_convence=Label(frame2, text="Convence:", font=("times new roman", 15),
+                       bg="#ffffff", fg="#000000")
+        lbl_convence.place(x=10,y=200)
+        Text_convence=Entry(frame2, font=("times new roman", 15),textvariable=self.var_convence, bg="#F0F0F0", fg="#000000",bd=2)
+        Text_convence.place(x=120, y=200, width=180, height=30)
+
+        lbl_net=Label(frame2, text="Net Salary:", font=("times new roman", 15),
+                       bg="#ffffff", fg="#000000")
+        lbl_net.place(x=310,y=200)
+        Text_net=Entry(frame2, font=("times new roman", 15), textvariable=self.var_net, bg="#F0F0F0", fg="#000000",bd=2)
+        Text_net.place(x=430, y=200, width=190, height=30)
+
+#***********row4*****************
+        btn_calculate=Button(frame2, text="Calculate", font=("times new roman", 15), bg="#0410B8", fg="white", bd=2, command=self.calculate)
+        btn_calculate.place(x=10, y=270, width=110, height=40)
+
+        btn_save=Button(frame2, text="Save",command=self.add, font=("times new roman", 15), bg="#0410B8", fg="white", bd=2)
+        btn_save.place(x=135, y=270, width=110, height=40)
+
+        btn_clear=Button(frame2, text="Clear", font=("times new roman", 15), bg="#0410B8", fg="white", bd=2, command=self.clear)
+        btn_clear.place(x=255, y=270, width=110, height=40)
+
+        btn_delete=Button(frame2, text="Delete", font=("times new roman", 15), bg="#0410B8", fg="white", bd=2, command=self.delete)
+        btn_delete.place(x=380, y=270, width=110, height=40)
+
+        btn_print = Button(frame2, text="Print", font=("times new roman", 15), bg="#0410B8", fg="white", bd=2, command=self.print_receipt)
+        btn_print.place(x=505, y=270, width=110, height=40)
+
+
+#************frame3***************************************
+        frame3 = Frame(self.root, bd=3, relief=RIDGE, bg="#ffffff")
+        frame3.place(x=732, y=380, width=643, height=325)
+#******************salary frame*******************
+
+        title_sal= Label(frame3, text="Salary Details", font=("Bauhaus 93", 20, "bold"),
+                       bg="#697677", fg="white", anchor="w", padx=10)
+        title_sal.place(x=0, y=0, relwidth=1)
+
+        sal_frame2=Frame(frame3,bg="#ffffff",bd=2, relief=RIDGE)
+        sal_frame2.place(x=0, y=30, relwidth=1, height=290)
+        
+        sample=f"""\tCompany name, XYZ\n\t Address: xyz, Floor2
+**********************************
+ Employee ID\t\t: 
+ Salary of\t\t:  MM-YYYY
+ Generated On\t\t:  DD-MM-YYYY
+**********************************
+ Total Days\t\t: DD
+ Total Present\t\t: DD
+ Total Absent\t\t: DD
+ Convence\t\t: Rs.----
+ Medical\t\t: Rs.----
+ PF\t\t: Rs.----
+ Gross Payment\t\t: Rs.------
+ Net Salary\t\t: Rs.-------
+**********************************
+This is computer generated slip
+........"""
+
+        scroll_y=Scrollbar(sal_frame2, orient=VERTICAL)
+        scroll_y.pack(side=RIGHT, fill=Y)
+
+        self.txt_salary=Text(sal_frame2, font=("times new roman", 13), bg="lightyellow",yscrollcommand=scroll_y.set)
+        self.txt_salary.pack(fill=BOTH,expand=1)
+        scroll_y.config(command=self.txt_salary.yview)
+        self.txt_salary.insert(END,sample)
+
+        self.check_connection()
+
+#*************************all function***********************
+    def print_receipt(self):
+        if self.var_code.get() == "":
+            messagebox.showerror("Error", "Please enter Employee Code to print receipt", parent=self.root)
+            return
+        
+        try:
+            # Get the desktop path
+            desktop_path = os.path.join(os.path.expanduser("~"), "Desktop")
+            directory = os.path.join(desktop_path, "salary_receipt")
+            
+            # Create directory if it doesn't exist
+            os.makedirs(directory, exist_ok=True)
+            
+            # Create filename
+            filename = os.path.join(directory, f"{self.var_code.get()}_slip.txt")
+            
+            # Get the salary slip content
+            content = self.txt_salary.get("1.0", END)
+            
+            # Write to file with proper encoding
+            with open(filename, "w", encoding='utf-8') as file_:
+                file_.write(content)
+            
+            messagebox.showinfo("Success", f"Salary slip saved successfully!\nLocation: {filename}", parent=self.root)
+            
+        except PermissionError:
+            messagebox.showerror("Error", "Permission denied. Please run as administrator or choose a different location.", parent=self.root)
+        except Exception as ex:
+            messagebox.showerror("Error", f"Failed to print receipt: {str(ex)}", parent=self.root)
+
+    def add(self):
+        if (self.var_code.get() == "" or self.var_designation.get() == "" or self.var_name.get() == "" or 
+            self.var_age.get() == "" or self.var_gender.get() == "" or self.var_email.get() == "" or 
+            self.var_hired.get() == "" or self.var_dateofbirth.get() == "" or self.var_dateofjoin.get() == "" or 
+            self.var_experience.get() == "" or self.var_id.get() == "" or self.var_contact.get() == "" or 
+            self.var_status.get() == "" or self.var_month.get() == "" or self.var_year.get() == "" or 
+            self.var_salary.get() == "" or self.var_total.get() == "" or self.var_absent.get() == "" or 
+            self.var_medical.get() == "" or self.var_fund.get() == "" or self.var_convence.get() == "" or 
+            self.var_net.get() == ""):
+            messagebox.showerror("Error","All Employee details are required", parent=self.root)
+            return
+        
+        con = None
+        try:
+            con = pymysql.connect(host='localhost', user='root', password='', database='ems')
+            cur = con.cursor()
+            cur.execute("SELECT * FROM emp_salary WHERE e_id=%s", (self.var_code.get(),))
+            row = cur.fetchone()
+            if row is not None:
+                messagebox.showerror("Error", "Employee code already exists, try again with another id", parent=self.root)
+            else:
+                cur.execute("""
+                    INSERT INTO emp_salary (
+                        e_id, designation, name, age, gender, email, hired, dateofbirth, dateofjoin, experience,
+                        id_proof, contact, status, address, month, year, salary, total_days, absent, medical, fund, convence, net_salary
+                    ) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
+                """, (
+                        self.var_code.get(),
+                        self.var_designation.get(),
+                        self.var_name.get(),
+                        self.var_age.get(),
+                        self.var_gender.get(),
+                        self.var_email.get(),
+                        self.var_hired.get(),
+                        self.var_dateofbirth.get(),
+                        self.var_dateofjoin.get(),
+                        self.var_experience.get(),
+                        self.var_id.get(),
+                        self.var_contact.get(),
+                        self.var_status.get(),
+                        self.Text_address.get("1.0", END).strip(),
+                        self.var_month.get(),
+                        self.var_year.get(),
+                        self.var_salary.get(),
+                        self.var_total.get(),
+                        self.var_absent.get(),
+                        self.var_medical.get(),
+                        self.var_fund.get(),
+                        self.var_convence.get(),
+                        self.var_net.get(),
+                    )
+                )
+                con.commit()
+                
+                # Save salary receipt as txt to desktop
+                try:
+                    desktop_path = os.path.join(os.path.expanduser("~"), "Desktop")
+                    directory = os.path.join(desktop_path, "salary_receipt")
+                    os.makedirs(directory, exist_ok=True)
+                    filename = os.path.join(directory, f"{self.var_code.get()}.txt")
+                    with open(filename, "w", encoding='utf-8') as file_:
+                        file_.write(self.txt_salary.get("1.0", END))
+                except Exception as file_ex:
+                    print(f"Warning: Could not save receipt file: {file_ex}")
+
+                messagebox.showinfo("Success", "Employee details added successfully", parent=self.root)
+                self.clear()
+                
+        except Exception as ex:
+            messagebox.showerror("Error", f"Database operation failed: {str(ex)}", parent=self.root)
+        finally:
+            if con:
+                con.close()
+
+    def calculate(self):
+        if self.var_code.get() == "":
+            messagebox.showerror("Error", "Please enter Employee Code", parent=self.root)
+            return
+        if self.var_salary.get() == "" or self.var_total.get() == "" or self.var_absent.get() == "":
+            messagebox.showerror("Error", "Please enter Salary, Total Days and Absent Days", parent=self.root)
+            return
+        
+        try:
+            # Validate numeric inputs
+            salary = float(self.var_salary.get())
+            total_days = float(self.var_total.get())
+            absent_days = float(self.var_absent.get())
+            
+            if total_days <= 0:
+                messagebox.showerror("Error", "Total Days must be greater than zero", parent=self.root)
+                return
+            
+            if absent_days < 0:
+                messagebox.showerror("Error", "Absent Days cannot be negative", parent=self.root)
+                return
+                
+            if absent_days > total_days:
+                messagebox.showerror("Error", "Absent Days cannot be greater than Total Days", parent=self.root)
+                return
+            
+            # Set default values for optional fields if empty
+            medical = float(self.var_medical.get()) if self.var_medical.get() else 0.0
+            fund = float(self.var_fund.get()) if self.var_fund.get() else 0.0
+            convence = float(self.var_convence.get()) if self.var_convence.get() else 0.0
+            
+            # Set default values in the entry fields
+            if self.var_medical.get() == "":
+                self.var_medical.set("0")
+            if self.var_fund.get() == "":
+                self.var_fund.set("0")
+            if self.var_convence.get() == "":
+                self.var_convence.set("0")
+            
+            # Calculate salary
+            per_day = salary / total_days
+            working_days = total_days - absent_days
+            gross_salary = per_day * working_days
+            deductions = medical + fund + convence
+            net_salary = gross_salary - deductions
+            
+            self.var_net.set(str(round(net_salary, 2)))
+            
+            # Generate salary slip
+            sample=f"""\tCompany name, XYZ\n\t Address: xyz, Floor2
+**********************************
+ Employee ID\t\t: {self.var_code.get()}
+ Salary of\t\t:  {self.var_month.get()}-{self.var_year.get()}
+ Generated On\t\t:  {str(time.strftime("%d-%m-%Y"))}
+**********************************
+ Total Days\t\t: {self.var_total.get()}
+ Total Present\t\t: {int(working_days)}
+ Total Absent\t\t: {self.var_absent.get()}
+ Convence\t\t: Rs.{self.var_convence.get()}
+ Medical\t\t: Rs.{self.var_medical.get()}
+ PF\t\t: Rs.{self.var_fund.get()}
+ Gross Payment\t\t: Rs.{str(round(gross_salary, 2))}
+ Net Salary\t\t: Rs.{self.var_net.get()}
+**********************************
+This is computer generated slip
+........"""
+            self.txt_salary.delete("1.0", END)
+            self.txt_salary.insert(END, sample)
+            
+        except ValueError:
+            messagebox.showerror("Error", "Please enter valid numeric values", parent=self.root)
+        except Exception as ex:
+            messagebox.showerror("Error", f"Calculation failed: {str(ex)}", parent=self.root)
+
+    def check_connection(self):
+        try:
+            con = pymysql.connect(host='localhost', user='root', password='', database='ems')
+            cur = con.cursor()
+            cur.execute("SELECT VERSION()")
+            version = cur.fetchone()
+            print(f"Database connected successfully. MySQL version: {version[0]}")
+            con.close()
+        except Exception as ex:
+            messagebox.showerror("Error", f"Database connection failed: {str(ex)}\n\nPlease ensure:\n1. MySQL server is running\n2. Database 'ems' exists\n3. Table 'emp_salary' exists", parent=self.root)
+
+    def clear(self):
+        self.var_code.set("")
+        self.var_designation.set("")
+        self.var_dateofbirth.set("")
+        self.var_name.set("")
+        self.var_dateofjoin.set("")
+        self.var_age.set("")
+        self.var_experience.set("")
+        self.var_gender.set("")
+        self.var_id.set("")
+        self.var_salary.set("")
+        self.var_hired.set("")
+        self.var_status.set("")
+        self.var_email.set("")
+        self.var_contact.set("")
+        self.var_month.set("")
+        self.var_year.set("")
+        self.var_total.set("")
+        self.var_absent.set("")
+        self.var_medical.set("")
+        self.var_fund.set("")
+        self.var_convence.set("")
+        self.var_net.set("")
+        self.Text_address.delete("1.0", END)
+        self.txt_salary.delete("1.0", END)
+        
+        sample=f"""\tCompany name, XYZ\n\t Address: xyz, Floor2
+**********************************
+ Employee ID\t\t: 
+ Salary of\t\t:  MM-YYYY
+ Generated On\t\t:  DD-MM-YYYY
+**********************************
+ Total Days\t\t: DD
+ Total Present\t\t: DD
+ Total Absent\t\t: DD
+ Convence\t\t: Rs.----
+ Medical\t\t: Rs.----
+ PF\t\t: Rs.----
+ Gross Payment\t\t: Rs.------
+ Net Salary\t\t: Rs.-------
+**********************************
+This is computer generated slip
+........"""
+        self.txt_salary.insert(END, sample)
+
+    def delete(self):
+        if self.var_code.get() == "":
+            messagebox.showerror("Error", "Please enter Employee Code to delete", parent=self.root)
+            return
+        
+        con = None
+        try:
+            con = pymysql.connect(host='localhost', user='root', password='', database='ems')
+            cur = con.cursor()
+            cur.execute("SELECT * FROM emp_salary WHERE e_id=%s", (self.var_code.get(),))
+            row = cur.fetchone()
+            if row is None:
+                messagebox.showerror("Error", "Invalid employee id, nothing to delete", parent=self.root)
+            else:
+                op = messagebox.askyesno("Confirm", "Do you really want to delete this record?", parent=self.root)
+                if op == True:
+                    cur.execute("DELETE FROM emp_salary WHERE e_id=%s", (self.var_code.get(),))
+                    con.commit()
+                    
+                    # Remove salary receipt file if exists
+                    try:
+                        desktop_path = os.path.join(os.path.expanduser("~"), "Desktop")
+                        directory = os.path.join(desktop_path, "salary_receipt")
+                        filename = os.path.join(directory, f"{self.var_code.get()}.txt")
+                        if os.path.exists(filename):
+                            os.remove(filename)
+                    except Exception as file_ex:
+                        print(f"Warning: Could not remove receipt file: {file_ex}")
+                    
+                    messagebox.showinfo("Success", "Employee record deleted successfully", parent=self.root)
+                    self.clear()
+                    
+        except Exception as ex:
+            messagebox.showerror("Error", f"Database operation failed: {str(ex)}", parent=self.root)
+        finally:
+            if con:
+                con.close()
+
+    def search(self):
+        if self.var_code.get() == "" and self.var_name.get() == "":
+            messagebox.showerror("Error", "Please enter Employee Code OR Employee Name to search", parent=self.root)
+            return
+        
+        con = None
+        try:
+            con = pymysql.connect(host='localhost', user='root', password='', database='ems')
+            cur = con.cursor()
+            if self.var_code.get() != "":
+                cur.execute("SELECT * FROM emp_salary WHERE e_id=%s", (self.var_code.get(),))
+                row = cur.fetchone()
+            elif self.var_name.get() != "":
+                cur.execute("SELECT * FROM emp_salary WHERE LOWER(name) LIKE LOWER(%s)", (f"%{self.var_name.get()}%",))
+                rows = cur.fetchall()
+                
+                if len(rows) == 0:
+                    row = None
+                elif len(rows) == 1:
+                    row = rows[0]
+                else:
+                    self.show_employee_selection(rows)
+                    return
+            
+            if row is None:
+                messagebox.showerror("Error", "Employee not found", parent=self.root)
+                self.clear()
+            else:
+                self.populate_employee_data(row)
+                        
+        except Exception as ex:
+            messagebox.showerror("Error", f"Database operation failed: {str(ex)}", parent=self.root)
+        finally:
+            if con:
+                con.close()
+
+    def show_employee_selection(self, employees):
+        """Show a selection window when multiple employees are found"""
+        selection_window = Toplevel(self.root)
+        selection_window.title("Select Employee")
+        selection_window.geometry("600x400")
+        selection_window.config(bg="#ffffff")
+        selection_window.grab_set() 
+        selection_window.transient(self.root)
+        
+        Label(selection_window, text="Multiple employees found. Please select one:", 
+              font=("times new roman", 14, "bold"), bg="#ffffff").pack(pady=10)
+        frame = Frame(selection_window, bg="#ffffff")
+        frame.pack(fill=BOTH, expand=True, padx=20, pady=10)
+        
+        scrollbar = Scrollbar(frame)
+        scrollbar.pack(side=RIGHT, fill=Y)
+        
+        listbox = Listbox(frame, yscrollcommand=scrollbar.set, font=("times new roman", 12))
+        listbox.pack(side=LEFT, fill=BOTH, expand=True)
+        scrollbar.config(command=listbox.yview)
+        for emp in employees:
+            display_text = f"ID: {emp[0]} | Name: {emp[2]} | Designation: {emp[1]} | Email: {emp[5]}"
+            listbox.insert(END, display_text)
+        
+        def on_select():
+            selection = listbox.curselection()
+            if selection:
+                selected_employee = employees[selection[0]]
+                self.populate_employee_data(selected_employee)
+                selection_window.destroy()
+            else:
+                messagebox.showwarning("Warning", "Please select an employee", parent=selection_window)
+        
+        def on_cancel():
+            selection_window.destroy()
+        
+        # Buttons
+        button_frame = Frame(selection_window, bg="#ffffff")
+        button_frame.pack(pady=10)
+        
+        Button(button_frame, text="Select", command=on_select, 
+               font=("times new roman", 12), bg="#0410B8", fg="white", 
+               width=10).pack(side=LEFT, padx=5)
+        
+        Button(button_frame, text="Cancel", command=on_cancel, 
+               font=("times new roman", 12), bg="#dc3545", fg="white", 
+               width=10).pack(side=LEFT, padx=5)
+        
+        # Double click to select
+        listbox.bind('<Double-1>', lambda e: on_select())
+
+    def populate_employee_data(self, row):
+        """Populate all form fields with employee data"""
+        try:
+            # Clear existing data first
+            self.clear()
+            
+            # Populate employee details
+            self.var_code.set(row[0] if row[0] else "")
+            self.var_designation.set(row[1] if row[1] else "")
+            self.var_name.set(row[2] if row[2] else "")
+            self.var_age.set(row[3] if row[3] else "")
+            self.var_gender.set(row[4] if row[4] else "")
+            self.var_email.set(row[5] if row[5] else "")
+            self.var_hired.set(row[6] if row[6] else "")
+            self.var_dateofbirth.set(row[7] if row[7] else "")
+            self.var_dateofjoin.set(row[8] if row[8] else "")
+            self.var_experience.set(row[9] if row[9] else "")
+            self.var_id.set(row[10] if row[10] else "")
+            self.var_contact.set(row[11] if row[11] else "")
+            self.var_status.set(row[12] if row[12] else "")
+            
+            # Populate address
+            self.Text_address.delete("1.0", END)
+            if row[13]:
+                self.Text_address.insert(END, row[13])
+            
+            # Populate salary details
+            self.var_month.set(row[14] if row[14] else "")
+            self.var_year.set(row[15] if row[15] else "")
+            self.var_salary.set(row[16] if row[16] else "")
+            self.var_total.set(row[17] if row[17] else "")
+            self.var_absent.set(row[18] if row[18] else "")
+            self.var_medical.set(row[19] if row[19] else "")
+            self.var_fund.set(row[20] if row[20] else "")
+            self.var_convence.set(row[21] if row[21] else "")
+            self.var_net.set(row[22] if row[22] else "")
+            
+            # Load or generate salary receipt
+            self.load_salary_receipt(row)
+            
+        except Exception as ex:
+            messagebox.showerror("Error", f"Error populating data: {str(ex)}", parent=self.root)
+
+    def load_salary_receipt(self, row):
+        """Load salary receipt from file or generate new one"""
+        desktop_path = os.path.join(os.path.expanduser("~"), "Desktop")
+        directory = os.path.join(desktop_path, "salary_receipt")
+        filename = os.path.join(directory, f"{row[0]}.txt")
+        
+        self.txt_salary.delete("1.0", END)
+        
+        # Try to load existing receipt file
+        if os.path.exists(filename):
+            try:
+                with open(filename, "r", encoding='utf-8') as file_:
+                    content = file_.read()
+                    self.txt_salary.insert(END, content)
+                return
+            except Exception as file_ex:
+                print(f"Warning: Could not read receipt file: {file_ex}")
+        
+        # Generate new salary slip if file doesn't exist or couldn't be read
+        self.generate_salary_slip(row)
+
+    def generate_salary_slip(self, row):
+        """Helper method to generate salary slip"""
+        try:
+            # Calculate values for display
+            salary = float(row[16]) if row[16] else 0
+            total_days = float(row[17]) if row[17] else 0
+            absent_days = float(row[18]) if row[18] else 0
+            
+            if total_days > 0:
+                per_day = salary / total_days
+                working_days = total_days - absent_days
+                gross_salary = per_day * working_days
+            else:
+                working_days = 0
+                gross_salary = 0
+            
+            sample = f"""\tCompany name, XYZ\n\t Address: xyz, Floor2
+**********************************
+ Employee ID\t\t: {row[0] if row[0] else 'N/A'}
+ Salary of\t\t:  {row[14] if row[14] else 'N/A'}-{row[15] if row[15] else 'N/A'}
+ Generated On\t\t:  {str(time.strftime("%d-%m-%Y"))}
+**********************************
+ Total Days\t\t: {row[17] if row[17] else 'N/A'}
+ Total Present\t\t: {int(working_days) if working_days >= 0 else 'N/A'}
+ Total Absent\t\t: {row[18] if row[18] else 'N/A'}
+ Convence\t\t: Rs.{row[21] if row[21] else '0'}
+ Medical\t\t: Rs.{row[19] if row[19] else '0'}
+ PF\t\t: Rs.{row[20] if row[20] else '0'}
+ Gross Payment\t\t: Rs.{round(gross_salary, 2) if gross_salary > 0 else '0'}
+ Net Salary\t\t: Rs.{row[22] if row[22] else '0'}
+**********************************
+This is computer generated slip
+........"""
+            self.txt_salary.insert(END, sample)
+            
+        except Exception as ex:
+            print(f"Error generating salary slip: {ex}")
+            # Fallback to basic template
+            sample = f"""\tCompany name, XYZ\n\t Address: xyz, Floor2
+**********************************
+ Employee ID\t\t: {row[0] if row[0] else 'N/A'}
+ Salary of\t\t:  {row[14] if row[14] else 'N/A'}-{row[15] if row[15] else 'N/A'}
+ Generated On\t\t:  {str(time.strftime("%d-%m-%Y"))}
+**********************************
+ Error loading salary details
+**********************************
+This is computer generated slip
+........"""
+            self.txt_salary.insert(END, sample)
+
+
+if __name__ == "__main__":
+    root = Tk()
+    obj = EmployeeSystem(root)
+    root.mainloop()
+
